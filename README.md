@@ -55,24 +55,4 @@ week09/
 ├── main.py               # ไฟล์หลักสำหรับรันโปรแกรม
 ├── pyproject.toml        # ไฟล์ตั้งค่าโปรเจกต์ (uv)
 └── README.md             # ไฟล์อธิบายโปรเจกต์
-=======
-1. **ติดตั้ง Dependencies:**
-   ```powershell
-   uv run main.py
----
 
-### ⚠️ อย่าลืมสั่ง "ปิดจบ" งานบน GitHub
-เพื่อให้หน้าเว็บ GitHub อัปเดตตามไฟล์ล่าสุด และกำจัด `uv.lock` กับ `.venv` ออกไปตามที่คุณต้องการ ให้รัน 3 คำสั่งนี้ใน Terminal ครับ:
-
-```powershell
-# 1. ลบสิ่งที่ไม่อยากให้โชว์บน GitHub (แต่ยังอยู่ในเครื่อง)
-git rm -r --cached .venv
-git rm --cached uv.lock
-
-# 2. บันทึกการเปลี่ยนแปลง
-git add .
-git commit -m "docs: complete README and clean up repository"
-
-# 3. ส่งขึ้น GitHub
-git push origin main
->>>>>>> 98a5e9b7c453eea553e0efe6993b052479aa706a
