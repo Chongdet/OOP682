@@ -32,7 +32,7 @@
 
 1. **ติดตั้ง Dependencies:**
    ```powershell
-   uv sync
+   uv run main.py
 ---
 
 ### ⚠️ อย่าลืมสั่ง "ปิดจบ" งานบน GitHub
