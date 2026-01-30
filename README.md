@@ -1,4 +1,4 @@
-# 📚 OOP Week 09: Inheritance Project
+# 📚 OOP Week 09: 
 
 ### 👤 Student Information
 * **Name:** นาย ทรงเดช จำปาเทศ
