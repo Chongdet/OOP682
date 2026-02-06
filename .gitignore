@@ -1,0 +1,11 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# uv lock file (ตามที่คุณต้องการ)
+uv.lock
+
+# Python cache
+__pycache__/
+*.py[cod]
