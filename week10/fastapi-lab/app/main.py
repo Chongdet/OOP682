@@ -1,25 +1,42 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from typing import List
-from .models import Task, TaskCreate
-from .repositories import InMemoryTaskRepository, ITaskRepository
+from sqlalchemy.orm import Session
+
+from .database import SessionLocal, engine
+from . import models, schemas  
+from .repositories import SqlTaskRepository
 from .services import TaskService
+
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Singleton Repository Instance
-task_repo = InMemoryTaskRepository()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-# Dependency Provider
-def get_task_service():
-    return TaskService(task_repo)
+def get_task_service(db: Session = Depends(get_db)):
+    repo = SqlTaskRepository(db)
+    return TaskService(repo)
 
-@app.get("/tasks", response_model=List[Task])
+# GET: ใช้ schemas.Task (Pydantic)
+@app.get("/tasks", response_model=List[schemas.Task])
 def read_tasks(service: TaskService = Depends(get_task_service)):
     return service.get_tasks()
 
-@app.post("/tasks", response_model=Task)
-def create_task(
-    task: TaskCreate, 
-    service: TaskService = Depends(get_task_service)
-):
+# POST: รับ schemas.TaskCreate, ส่งกลับ schemas.Task
+@app.post("/tasks", response_model=schemas.Task)
+def create_task(task: schemas.TaskCreate, service: TaskService = Depends(get_task_service)):
     return service.create_task(task)
+
+# PUT: ใช้ schemas.Task
+@app.put("/tasks/{task_id}/complete", response_model=schemas.Task)
+def mark_task_complete(task_id: int, service: TaskService = Depends(get_task_service)):
+    result = service.mark_complete(task_id)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return result

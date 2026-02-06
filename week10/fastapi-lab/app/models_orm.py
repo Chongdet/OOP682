@@ -1,6 +1,8 @@
-# 📂 app/models.py
 from sqlalchemy import Column, Integer, String, Boolean
-from .database import Base
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
+
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -8,4 +10,4 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String, nullable=True)
-    is_completed = Column(Boolean, default=False)
+    completed = Column(Boolean, default=False)
