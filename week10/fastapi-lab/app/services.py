@@ -1,6 +1,6 @@
 from typing import List, Optional
 from fastapi import HTTPException
-from . import schemas 
+from . import schemas
 from .repositories import ITaskRepository
 
 class TaskService:
@@ -11,19 +11,23 @@ class TaskService:
         return self.task_repository.get_all()
 
     def create_task(self, task: schemas.TaskCreate) -> schemas.Task:
-        existing_task = self.task_repository.get_by_title(task.title)
+
+        existing_task = self.task_repository.get_by_title(task.title.strip())
+
         if existing_task:
-            raise HTTPException(status_code=400, detail="Task with this title already exists")
+            raise HTTPException(
+                status_code=400,
+                detail=f"ภารกิจ '{task.title}' มันซ้ำ! ทรงเดชไม่ปลื้ม เปลี่ยนชื่อใหม่ซะ",
+            )
             
+        print(f"--- [Songdej Log] กำลังสร้างภารกิจ: {task.title} ---")
         return self.task_repository.create(task)
 
     def mark_complete(self, task_id: int) -> Optional[schemas.Task]:
-        # 1. หา Task เก่ามาก่อน
         task = self.task_repository.get_by_id(task_id)
-        
-        # 2. ถ้าเจอ ให้แก้สถานะเป็น True แล้วบันทึก
+
         if task:
             task.is_completed = True
             return self.task_repository.update(task_id, task)
-            
+
         return None
